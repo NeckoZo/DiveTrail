@@ -149,7 +149,7 @@ def verify_zip(zip_path, *, public, contents_only):
             verify_window(scratch / 'launcher' / root_name, env)
             command = [str(bundle / 'runtime/python.exe'), '-B', '-X', 'utf8',
                        str(Path(__file__).resolve()), '--extracted']
-            subprocess.run(command + (['--public'] if public else []), env=env, timeout=75, check=True)
+            subprocess.run(command + (['--public'] if public else []), cwd=bundle, env=env, timeout=75, check=True)
 
 
 def verify_setup(setup_path, *, public, contents_only):
@@ -268,7 +268,7 @@ def verify_extracted(public):
                 self._window.destroy()
 
     app.Api = ProbeApi
-    sys.argv = ['app.py', '--portable']
+    sys.argv = [str(root / 'app.py'), '--portable']
     app.main(instance_name=r'Local\MatchLogPackagedProbe')
     assert result.get('ok'), result
     print(f'Packaged {VERSION} UI verified: first-use setup, F8 guide, update reminder, and sanitized diagnostics export')
