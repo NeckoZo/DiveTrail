@@ -1,0 +1,14 @@
+.venv/
+data/
+portable-data/
+__pycache__/
+output/
+.playwright-cli/
+.playwright/
+ui/qa-*.json
+*.pyc
+*.log
+.env
+.env.*
+*.dpapi
+*.sqlite3*

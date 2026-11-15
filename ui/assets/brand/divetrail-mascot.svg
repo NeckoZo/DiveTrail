@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" fill="none">
+<title>DiveTrail water mascot</title>
+<path d="M70 66c12-2 15-11 19-8 6 5-2 19-13 22H31C12 80 7 68 13 58c5-8 17-9 27-4V30c0-15 7-23 19-23 12 0 20 8 20 17 0 8-6 14-15 15v17c0 6 2 9 6 10Z" fill="#ACCC85" stroke="#243C37" stroke-width="4" stroke-linejoin="round"/>
+<path d="M44 78c-10-2-15-8-13-13 2-5 7-4 12-1 6 4 12 1 12-11V33c0-7 3-12 9-13-4 7-4 15-4 26v14c0 10 3 16 9 18" fill="#E8E6BB"/>
+<path d="m20 58 6-8 5 6m3-1 6-7 4 8" fill="#6A9C72" stroke="#243C37" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="66" cy="23" r="3" fill="#243C37"/><circle cx="67" cy="22" r=".8" fill="#fff"/>
+<path d="M73 32c-3 2-5 2-8 0M27 78l-6 8m29-7-4 7" stroke="#243C37" stroke-width="4" stroke-linecap="round"/>
+<path d="m14 91 19-1 12-7 13 2 17-10" stroke="#F48160" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="76" cy="74" r="4" fill="#F48160"/>
+</svg>

@@ -1,0 +1,311 @@
+<!doctype html>
+<html data-artwork="public" lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' data: http://127.0.0.1:*; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' http://127.0.0.1:*">
+<title>DiveTrail · 尾迹</title>
+<link rel="icon" href="assets/brand/divetrail-mark.svg" type="image/svg+xml"><link rel="stylesheet" href="style.css"><link rel="stylesheet" href="desktop.css"><link rel="stylesheet" href="diagnostics.css"><link rel="stylesheet" href="maps.css">
+</head>
+<body>
+<div class="window-titlebar"><div class="pywebview-drag-region window-drag"><img src="assets/brand/divetrail-mark.svg" alt=""><span>DiveTrail · 尾迹</span><small>Apex Legends match history and squad stats</small></div><div class="window-buttons"><button data-window="minimize" aria-label="最小化">─</button><button data-window="maximize" aria-label="最大化或还原">□</button><button data-window="close" class="window-close" aria-label="收起到托盘" title="收起到托盘">×</button></div></div>
+<aside class="sidebar">
+  <button class="brand" id="website-btn" type="button" aria-label="打开 DiveTrail 官网" title="打开 DiveTrail 官网"><img src="assets/brand/divetrail-mark.svg" alt=""><div>DiveTrail<small>尾迹</small></div></button>
+  <nav aria-label="主导航">
+    <button class="nav active" data-nav="overview"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v18h18M6 15l5-5 4 3 5-7"/></svg>战绩概览</button>
+    <button class="nav" data-nav="matches"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16M8 3v18"/></svg>对局记录</button>
+    <button class="nav" data-nav="teammates"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg>玩家档案</button>
+    <button class="nav" data-nav="maps"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><ellipse cx="12" cy="12" rx="4" ry="9"/><path d="M3 12h18"/></svg>地图轮换</button>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="framework-motto"><span>三分钟一把</span><strong>超爽超解压</strong><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16 16 4M13 4h3v3M8 20 20 8M17 8h3v3"/></svg></div>
+    <div class="sidebar-tools">
+      <button class="nav" id="usage-btn" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5a9 9 0 0 0-8-1v15a9 9 0 0 1 8 1 9 9 0 0 1 8-1V4a9 9 0 0 0-8 1zm0 0v15"/></svg>使用说明</button>
+      <button class="nav" id="capture-diagnostics-btn" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h9l5 5v13H5zM14 3v5h5M8 12h8M8 16h8"/></svg>采集日志</button>
+      <button class="nav" id="settings-btn" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="8" cy="7" r="2.5"/><circle cx="16" cy="17" r="2.5"/></svg>设置</button>
+    </div>
+    <button class="text-button release-update" id="release-update" hidden></button>
+    <div class="sidebar-profile"><div class="avatar apex-avatar"><svg class="sidebar-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3.5"/><path d="M5 21v-2a7 7 0 0 1 14 0v2"/></svg></div><strong id="profile-name">捍卫者</strong><button class="version" id="changelog-btn" aria-label="查看版本历史" title="版本历史">1.0.0</button></div>
+  </div>
+</aside>
+<main>
+  <header class="topbar"><span class="season-chip" id="ranked-map-caption">排位地图 · —</span><div class="capture-status"><i id="capture-dot"></i><div><strong id="capture-state">准备就绪</strong><small id="capture-message">等待 Apex</small><progress id="recognition-progress" max="3" aria-label="对局识别进度" hidden></progress></div></div></header>
+  <div class="content">
+    <div class="page-heading"><h1 id="page-title">战绩概览</h1></div>
+    <aside id="profile-notice" class="panel profile-notice" hidden><div><h2 id="profile-notice-title">首次使用 · 请设置档案</h2><p id="profile-notice-message"></p></div><button type="button" class="button primary" id="profile-setup">设置档案</button></aside>
+    <aside id="profile-change-notice" class="panel profile-notice" hidden><div><h2>检测到昵称变化</h2><p id="profile-change-message"></p></div><button type="button" class="button primary" id="profile-change-open">核对档案</button></aside>
+    <section id="overview-view">
+      <div class="hero-grid">
+        <article class="panel rank-card">
+          <div class="panel-heading"><h2>当前排位 <span class="season-chip" id="season-caption">S31 / 01</span></h2><span class="pill" id="rank-source">缓存</span></div>
+          <div class="rank-body">
+            <div class="rank-halo"><img class="rank-emblem" id="rank-icon" src="assets/brand/rank-fallback.svg" alt="段位"></div>
+            <div class="rank-info">
+              <div class="rank-headline"><h2 id="rank-name">—</h2><div class="rank-progress"><strong id="rank-progress">—</strong><span>/</span><span id="rank-capacity">—</span><em>RP</em></div></div>
+              <div class="progress-track" id="rank-track" role="progressbar" aria-label="本段晋级进度" title="当前段位内的分数进度"><i id="progress-fill"></i></div>
+            </div>
+          </div>
+          <div class="rank-footer">
+            <div id="total-rp" tabindex="0" aria-describedby="rank-cache-time"><span class="total-rp-label">总 RP</span><strong id="total-rp-value">—</strong><small class="rank-tooltip" id="rank-cache-time"></small></div>
+            <div><small>最近记分</small><strong id="latest-delta"><span id="latest-delta-value">—</span><em>RP</em></strong></div>
+          </div>
+        </article>
+        <article class="panel trend-panel">
+          <div class="panel-heading"><h2>上分轨迹</h2></div>
+          <div id="chart"></div>
+          <div class="trend-footer"><div id="chart-caption" class="chart-caption"></div><button type="button" class="text-button" id="share-overview-btn" aria-haspopup="dialog">分享战绩</button></div>
+        </article>
+      </div>
+      <div class="section-title"><h2 id="metrics-title">过去 12 小时表现</h2><div class="metrics-controls"><span id="metrics-caption"></span><div class="overview-tools">
+        <div class="time-buttons" role="group" aria-label="战绩范围"><button type="button" data-overview-range="12">12 小时</button><button type="button" data-overview-range="24">24 小时</button><button type="button" data-overview-range="30">近 30 局</button><button type="button" data-overview-range="all">本赛段</button></div>
+      </div></div></div><div class="metrics" id="metrics"></div>
+      <div class="section-title"><h2>最近对局 <span id="recent-count"></span></h2><div class="section-actions"><button class="text-button" data-nav="matches">全部记录</button></div></div><div class="panel table-panel" id="recent-table"></div>
+      <section class="performance-section" id="performance-insights" aria-label="对局表现细分"></section>
+      <div class="analysis-grid"><article class="hero-panel" id="hero-panel"><div class="hero-grid-art"></div><div class="hero-copy"><span class="eyebrow">ONE MORE DROP.</span><h2 id="hero-line">猎杀来了<br>也是两枪。</h2><div class="hero-signature"><div><span id="hero-name">VANTAGE / 万蒂奇</span><small id="hero-skin"></small></div><button class="icon-button" id="shuffle-hero" aria-label="换个英雄" title="换个英雄">↻</button></div></div><div class="hero-art-frame" id="hero-art-frame"><img id="hero-art" class="hero-art" src="assets/brand/divetrail-mark.svg" alt="万蒂奇"></div></article><article class="panel friends-panel"><div class="panel-heading"><h2>固定队友</h2><div class="metrics-controls"><button type="button" class="text-button" id="friends-recent-btn" aria-haspopup="dialog" title="按首页当前范围查看每位队友的场均数据和近期伤害">最近表现</button><button type="button" class="text-button" data-nav="teammates" title="查看完整的玩家档案和英雄使用数据">玩家档案</button></div></div><div id="friends-list"></div></article></div>
+      <section class="panel profile-panel" id="profile-panel"><div class="panel-heading"><div><span class="eyebrow">PLAYER SNAPSHOT</span><h2>个人数据</h2></div><span id="profile-snapshot-time" class="subtle"></span></div><div id="profile-snapshot-content"></div></section>
+    </section>
+    <section id="matches-view" hidden>
+      <div class="panel match-toolbar">
+        <label class="search-field"><span>⌕</span><input id="match-search" placeholder="搜索玩家" aria-label="搜索玩家"></label>
+        <select id="mode-filter" aria-label="筛选模式"><option value="all">全部模式</option><option value="ranked">排位</option><option value="casual">匹配</option><option value="event">活动</option></select>
+        <div class="filters"><button class="filter active" data-filter="all" aria-pressed="true">全部</button><button class="filter" data-filter="wins" aria-pressed="false">吃鸡</button></div>
+        <select id="status-filter" aria-label="筛选状态"><option value="all">全部状态</option><option value="recorded">已记录</option><option value="incomplete">待补全</option><option value="snapshot">最后快照</option><option value="ongoing" hidden>进行中</option></select>
+        <details id="custom-time"><summary class="button" id="match-time-label">全部时间</summary>
+          <div class="panel custom-time-menu">
+            <span class="subtle">对局时间 · UTC+8</span>
+            <div class="time-buttons" role="group" aria-label="对局时间范围">
+              <button type="button" data-match-hours="all" aria-pressed="true">全部时间</button>
+              <button type="button" data-match-hours="12" aria-pressed="false">近 12 小时</button>
+              <button type="button" data-match-hours="24" aria-pressed="false">近 24 小时</button>
+              <button type="button" data-match-hours="168" aria-pressed="false">近 7 天</button>
+            </div>
+            <div class="time-range-inputs">
+              <div class="time-boundary" role="group" aria-label="起始时间"><label for="match-start">从</label><input id="match-start" type="date" aria-label="起始日期"><select id="match-start-hour" aria-label="起始小时" disabled><option value="">时</option></select><select id="match-start-minute" aria-label="起始分钟" disabled><option value="">分</option></select></div>
+              <div class="time-boundary" role="group" aria-label="结束时间"><label for="match-end">至</label><input id="match-end" type="date" aria-label="结束日期"><select id="match-end-hour" aria-label="结束小时" disabled><option value="">时</option></select><select id="match-end-minute" aria-label="结束分钟" disabled><option value="">分</option></select></div>
+            </div>
+            <button type="button" class="text-button" id="match-time-clear">清除日期</button>
+          </div>
+        </details>
+
+        <details class="supplement-actions"><summary class="button">补录</summary><div class="panel supplement-menu"><button class="button" id="new-match-btn">＋ 添加记录</button><button class="button" id="import-btn">↥ 上传截图</button><button type="button" class="button" id="merge-matches-btn" aria-haspopup="dialog">合并同局</button></div></details>
+        <button class="button" id="export-btn" title="导出当前结果">导出 · 0 局</button>
+      </div>
+      <button type="button" class="text-button" id="undo-merge-btn" hidden>撤销上次合并</button><div id="hero-match-filter" class="hero-match-filter" hidden><span id="hero-match-filter-label"></span><button type="button" class="text-button" id="hero-match-filter-clear">清除英雄筛选 ×</button></div><div class="panel table-panel" id="matches-table"></div><details class="panel recovery-panel"><summary>采集线索 <span id="recovery-count"></span></summary><button type="button" class="text-button" data-open-folder="inbox">打开待识别截图 ↗</button><div id="recovery-list"></div></details><details class="panel recovery-panel"><summary>局内快照 <span id="backup-count"></span></summary><div id="backup-list"></div></details>
+    </section>
+    <section id="teammates-view" hidden>
+      <article class="panel player-heroes">
+        <div class="panel-heading"><div><h2>赛段表现</h2><span id="hero-stats-scope" class="subtle"></span></div>
+          <label class="hero-player-control">玩家<select id="hero-player" aria-label="选择查看英雄统计的玩家"></select></label>
+        </div>
+        <p id="hero-player-summary" class="subtle" aria-live="polite"></p>
+        <div id="player-performance"></div>
+        <div class="section-title profile-hero-heading"><h3>英雄使用统计</h3></div>
+        <div class="table-panel" id="player-hero-table"></div>
+      </article>
+      <div class="section-title"><h2>固定队友</h2></div>
+      <div class="teammate-grid" id="teammate-grid"></div>
+    </section>
+    <section id="maps-view" hidden>
+      <div class="section-title map-section-heading"><h2>当前轮换</h2><button type="button" class="button" id="map-refresh">刷新轮换</button></div>
+      <div id="map-rotation" aria-label="当前与下一张地图"></div>
+      <div class="section-title map-section-heading"><h2>地图战绩</h2><select id="map-scope" aria-label="地图战绩模式"><option value="all">全部模式</option><option value="ranked">排位</option><option value="casual">匹配</option><option value="event">活动</option></select></div>
+      <div id="map-stats"></div>
+    </section>
+  </div>
+</main>
+<dialog id="profile-setup-dialog" aria-labelledby="profile-setup-title">
+  <form id="profile-setup-form">
+    <div class="dialog-header"><h2 id="profile-setup-title">建立本机档案</h2><button type="button" class="icon-button" data-close="profile-setup-dialog" aria-label="关闭">×</button></div>
+    <p class="subtle">点「开始识别」，切回 Apex 并停留在排位大厅。识别结束后会提醒你回到 DiveTrail。</p>
+    <div class="profile-scan">
+      <button type="button" class="button primary" id="profile-scan-btn">开始识别</button>
+      <p id="profile-scan-status" role="status"></p>
+    </div>
+    <label>Apex 游戏昵称<input name="self_name" type="text" maxlength="64" required autocomplete="off" spellcheck="false" placeholder="可直接手动填写游戏内显示的 ID"></label>
+    <div class="dialog-footer"><button type="button" class="text-button" id="profile-setup-settings">打开设置</button><button type="submit" class="button primary">确认并开始</button></div>
+  </form>
+</dialog>
+<dialog id="profile-change-dialog" aria-labelledby="profile-change-title">
+  <div class="dialog-header"><h2 id="profile-change-title">这是同一个账号吗？</h2><button type="button" class="icon-button" data-close="profile-change-dialog" aria-label="暂不处理">×</button></div>
+  <dl class="profile-identity"><div><dt>当前档案</dt><dd id="profile-change-current"></dd></div><div><dt>大厅昵称</dt><dd id="profile-change-detected"></dd></div></dl>
+  <div class="profile-choice"><strong>新建档案</strong><p>适用于切换账号。旧档案保留，新昵称使用独立战绩。</p></div>
+  <div class="profile-choice"><strong>合并到原档案</strong><p>适用于同一账号改名。合并前会自动备份数据库。</p></div>
+  <p class="profile-change-error" id="profile-change-error" role="alert" hidden></p>
+  <div class="dialog-footer profile-change-actions"><button type="button" class="text-button" data-close="profile-change-dialog" autofocus>暂不处理</button><button type="button" class="button" data-profile-choice="new">新建档案</button><button type="button" class="button primary" data-profile-choice="merge">备份并合并</button></div>
+</dialog>
+<dialog id="usage-dialog" aria-labelledby="usage-title">
+  <div class="dialog-header"><h2 id="usage-title">使用说明</h2><button type="button" class="icon-button" data-close="usage-dialog" aria-label="关闭">×</button></div>
+  <ol class="usage-steps">
+    <li><strong>全自动识别</strong><p>首次建立档案后，DiveTrail 会自动读取 Apex 前台的排位大厅、开局倒计时、局内快照、赛后总结、经验值页的 RP，以及个人数据页。打完可以切到总结和经验值页，补齐本局数据。</p></li>
+    <li><strong><kbd>F8</kbd> 手动补拍</strong><p>想补拍总结或分数时，在对应的 Apex 页面按 F8。</p></li>
+    <li><strong>听音效确认进度</strong><p>总结已读取、RP 已核验时会按设置播放提示音。可在「设置 → 采集与音效」试听并选择提醒时机。</p></li>
+    <li><strong>暂停或退出</strong><p>窗口右上角的 × 会收起到 Windows 托盘。在设置里暂停或继续记录，右键托盘图标可完全退出。</p></li>
+    <li><strong>遇到问题</strong><p>在 <button type="button" class="text-button inline-guide-link" id="usage-feedback">采集日志</button> 描述遇到的问题。漏记或错记时，附上大致对局时间和当时看到的游戏页面。</p></li>
+  </ol>
+  <div class="dialog-footer usage-actions"><button type="button" class="button" id="usage-return" data-close="usage-dialog" autofocus>返回</button></div>
+</dialog>
+<dialog id="settings-dialog" aria-labelledby="settings-title">
+  <form id="settings-form" novalidate>
+    <div class="dialog-header"><h2 id="settings-title">设置</h2><button class="icon-button" type="button" data-close="settings-dialog" aria-label="关闭">×</button></div>
+    <div class="settings-columns">
+      <section class="settings-section" aria-labelledby="settings-profile-title">
+        <h3 id="settings-profile-title">账户与显示</h3>
+        <label class="settings-field">我的昵称<input name="self_name" required maxlength="64"></label>
+        <div class="form-row">
+          <label class="settings-field">固定队友 1<input name="friend_one" maxlength="64" placeholder="选填"></label>
+          <label class="settings-field">固定队友 2<input name="friend_two" maxlength="64" placeholder="选填"></label>
+        </div>
+        <label class="settings-field">主题<select name="theme"><option value="dark">深色 · 夜航</option><option value="slate">中间色 · 岩灰</option><option value="light">浅色 · 晨雾</option></select></label>
+        <label class="settings-toggle"><input type="checkbox" name="reduce_motion">减少界面动效</label>
+        <label class="settings-toggle"><input type="checkbox" name="show_hero_board">首页英雄卡</label>
+        <div class="settings-group">
+          <label class="settings-toggle"><input type="checkbox" name="auto_season">自动切换赛季</label>
+          <div class="form-row">
+            <label class="settings-field">赛季<input name="season" required></label>
+            <label class="settings-field">赛段<select name="split"><option value="1">01</option><option value="2">02</option></select></label>
+          </div>
+        </div>
+      </section>
+      <section class="settings-section" aria-labelledby="settings-game-title">
+        <div class="setting-inline settings-recording-heading"><h3 id="settings-game-title">采集与音效</h3><button type="button" class="button" id="record-control">暂停记录</button></div>
+        <div class="settings-group">
+          <label class="settings-toggle settings-disabled" title="结算页打开后仍会自动识别"><input type="checkbox" name="auto_switch" disabled><span>自动采集结算页<small>自动切页暂不可用</small></span></label>
+          <label class="settings-toggle" title="游戏在前台时延后识别任务，减少局内资源占用"><input type="checkbox" name="low_impact"><span>游戏优先<small>局内仅采集，结算后识别</small></span></label>
+          <label class="settings-toggle"><input type="checkbox" name="debug_mode">调试状态</label>
+          <label class="settings-toggle"><input type="checkbox" name="start_on_login">登录 Windows 后启动</label>
+        </div>
+        <div class="settings-group sound-settings">
+          <h4>结算音效</h4>
+          <div class="sound-choice">
+            <label class="settings-field">提示音<select name="settlement_tone"><option value="summary">提示音 A</option><option value="rank">提示音 B</option><option value="end">提示音 C</option></select></label>
+            <button type="button" class="button" id="sound-preview" aria-label="试听所选音效">试听</button>
+          </div>
+          <label class="settings-toggle"><input type="checkbox" name="sound_end_enabled">进入赛后</label>
+          <label class="settings-toggle"><input type="checkbox" name="sound_summary_enabled">总结已读取</label>
+          <label class="settings-toggle"><input type="checkbox" name="sound_rank_enabled">RP 已核验</label>
+        </div>
+      </section>
+      <section class="settings-section" aria-labelledby="settings-retention-title">
+        <h3 id="settings-retention-title">截图保留</h3>
+        <div class="settings-group">
+          <label class="settings-toggle"><input type="checkbox" name="auto_cleanup">定期清理截图</label>
+          <label class="settings-inline-number"><span>临时截图</span><span><input type="number" name="cleanup_temporary_days" min="1" max="3650" required>天</span></label>
+          <label class="settings-inline-number"><span>待补录截图</span><span><input type="number" name="cleanup_review_days" min="1" max="3650" required>天</span></label>
+          <label class="settings-inline-number"><span>原始截图</span><span><input type="number" name="cleanup_original_days" min="1" max="3650" required>天</span></label>
+          <div class="data-buttons">
+            <button type="button" class="button" data-open-folder="screenshots">打开截图</button>
+            <button type="button" class="button" id="cleanup-btn">清理截图</button>
+          </div>
+        </div>
+        <div class="settings-group">
+          <h4>本地数据</h4>
+          <div class="data-buttons"><button type="button" class="button" id="backup-export" title="将本地战绩打包为 .matchlog 备份">导出备份</button><button type="button" class="button" id="backup-import">导入备份</button><button type="button" class="button" data-open-folder="data">打开目录</button><button type="button" class="button danger-button" id="reset-btn" title="清空战绩、分数校准和截图，需再次确认">重置数据</button></div>
+        </div>
+      </section>
+      <section class="settings-section" aria-labelledby="settings-highlights-title">
+        <h3 id="settings-highlights-title">精彩对局</h3>
+        <div class="settings-group">
+          <label class="settings-inline-number"><span>高光保留</span><span><input type="number" name="highlight_days" min="0" max="3650" required>天</span></label>
+          <button type="button" class="button" data-open-folder="highlights">打开高光</button>
+          <small class="settings-note">0 天为永久保留。</small>
+        </div>
+        <div class="settings-group">
+          <h4>高光门槛</h4>
+          <div class="highlight-fields">
+            <label class="settings-field">个人击杀 ≥<input type="number" name="highlight_kills" min="0" max="500" required></label>
+            <label class="settings-field">团队击杀 ≥<input type="number" name="highlight_team_kills" min="0" max="500" required></label>
+            <label class="settings-field">个人伤害 ≥<input type="number" name="highlight_damage" min="0" max="100000" required></label>
+            <label class="settings-field">本局 RP ≥<input type="number" name="highlight_rp" min="0" max="3000" required></label>
+          </div>
+          <small class="settings-note">满足任一条件即可，填 0 关闭该条件。</small>
+        </div>
+      </section>
+    </div>
+    <div class="dialog-footer"><span id="settings-save-status" role="status">设置自动保存</span><button class="button" type="submit">完成</button></div>
+  </form>
+</dialog>
+<dialog id="import-preview-dialog" aria-labelledby="import-preview-title">
+  <form method="dialog">
+    <div class="dialog-header"><h2 id="import-preview-title">核对补图分组</h2><button type="submit" value="cancel" class="icon-button" aria-label="关闭">×</button></div>
+    <p id="import-preview-message" class="subtle"></p>
+    <ol id="import-preview-list"></ol>
+    <div class="dialog-footer"><button type="submit" value="cancel" class="button" autofocus>取消</button><button type="submit" value="confirm" class="button primary">确认补入</button></div>
+  </form>
+</dialog>
+<dialog id="capture-diagnostics-dialog" aria-labelledby="capture-diagnostics-title">
+  <div class="dialog-header"><h2 id="capture-diagnostics-title">采集日志</h2><button class="icon-button" data-close="capture-diagnostics-dialog" aria-label="关闭">×</button></div>
+  <p class="diagnostics-note" id="capture-diagnostics-note"></p>
+  <textarea id="capture-diagnostics-text" readonly aria-label="采集日志记录" spellcheck="false"></textarea>
+  <div class="diagnostics-actions"><button type="button" class="button" id="cloud-logs-download" hidden>下载云端日志</button><button type="button" class="button" id="capture-diagnostics-refresh">刷新</button><button type="button" class="button" id="capture-diagnostics-copy">复制事件</button><button type="button" class="button" id="capture-diagnostics-export">导出日志</button></div>
+  <section id="diagnostics-upload" class="diagnostics-upload" aria-label="匿名反馈">
+    <label for="diagnostics-feedback" class="diagnostics-feedback-label">反馈说明 <span class="subtle">选填</span></label>
+    <textarea id="diagnostics-feedback" rows="2" maxlength="1000" placeholder="发生了什么？可附上大致的对局时间" aria-describedby="diagnostics-feedback-hint"></textarea>
+    <p id="diagnostics-feedback-hint" class="subtle">最多 1,000 字。说明会原样发送，请避开账号、联系方式和本机路径。</p>
+    <fieldset id="diagnostics-range"><legend>随反馈发送</legend>
+      <label><input type="radio" name="diagnostics-range" value="24h" checked>最近 24 小时日志</label>
+      <label><input type="radio" name="diagnostics-range" value="all">全部保留日志</label>
+      <label><input type="radio" name="diagnostics-range" value="none">仅发送说明</label>
+    </fieldset>
+    <div class="diagnostics-upload-footer">
+      <p id="diagnostics-upload-status" role="status" class="subtle">匿名日志包含采集时间、事件类型和报告内编号。</p>
+      <div class="diagnostics-actions">
+        <button type="button" class="button" id="diagnostics-preview">预览</button>
+        <button type="button" class="button primary" id="diagnostics-submit">提交</button>
+      </div>
+    </div>
+  </section>
+</dialog>
+<dialog id="cloud-logs-auth" aria-labelledby="cloud-logs-auth-title">
+  <form id="cloud-logs-auth-form">
+    <div class="dialog-header"><h2 id="cloud-logs-auth-title">下载云端日志</h2><button type="button" class="icon-button" data-close="cloud-logs-auth" aria-label="关闭">×</button></div>
+    <label>管理口令<input type="password" name="pin" inputmode="numeric" autocomplete="off" pattern="[0-9]{6}" required></label>
+    <div class="dialog-footer"><button type="button" class="button" data-close="cloud-logs-auth">取消</button><button type="submit" class="button primary">下载</button></div>
+  </form>
+</dialog>
+<dialog id="community-dialog" aria-labelledby="anonymous-title">
+  <div class="dialog-header"><h2 id="anonymous-title">匿名战绩统计</h2><button class="icon-button" data-close="community-dialog" aria-label="关闭">×</button></div>
+  <section id="anonymous-upload" class="anonymous-upload">
+    <p class="subtle">自愿参与社区统计。只发送开启后完成且经过预览的对局，含日期、赛段、模式、英雄、名次和伤害。</p>
+    <label class="settings-toggle"><input id="anonymous-enabled" type="checkbox">允许匿名上传</label>
+    <div class="diagnostics-actions">
+      <button type="button" class="button" id="anonymous-preview" disabled>预览本次上传</button>
+      <button type="button" class="button primary" id="anonymous-send" hidden>确认上传</button>
+      <button type="button" class="button" id="anonymous-summary" disabled>查看社区统计</button>
+    </div>
+    <p id="anonymous-status" role="status" class="subtle">默认关闭</p>
+  </section>
+</dialog>
+<dialog id="share-overview-dialog" aria-labelledby="share-overview-title">
+  <div class="dialog-header"><h2 id="share-overview-title">今晚战绩</h2><button class="icon-button" data-close="share-overview-dialog" aria-label="关闭">×</button></div>
+  <div class="share-options">
+    <label class="settings-toggle"><input type="checkbox" id="share-hide-names" checked>隐藏玩家名</label>
+    <label class="share-skin-label">英雄立绘 <select id="share-skin" disabled><option value="">默认立绘</option></select></label>
+  </div>
+  <canvas id="share-card" width="960" height="520" aria-label="战绩分享图预览"></canvas>
+  <div class="dialog-footer"><button class="button" id="share-save-btn">保存图片</button><button class="button primary" id="share-copy-btn">复制图片</button></div>
+</dialog>
+<dialog id="reset-dialog"><div class="dialog-header"><h2>重置本地数据</h2><button class="icon-button" data-close="reset-dialog">×</button></div><div id="reset-content"></div></dialog>
+<dialog id="friends-recent-dialog" aria-labelledby="friends-recent-title"><div class="dialog-header"><div><h2 id="friends-recent-title">固定队友 · 近 12 小时</h2><span class="subtle">各项按已识别的数据计算</span></div><button type="button" class="icon-button" data-close="friends-recent-dialog" aria-label="关闭">×</button></div><div class="table-panel" id="friends-recent-content"></div></dialog>
+<dialog id="merge-dialog" aria-labelledby="merge-title">
+  <form id="merge-form">
+    <div class="dialog-header"><h2 id="merge-title">合并同一局的记录</h2><button type="button" class="icon-button" data-close="merge-dialog" aria-label="关闭">×</button></div>
+    <div id="merge-selection">
+      <p class="subtle">选择同一场对局的两条记录，先核对时间、排名、伤害和 RP。</p>
+      <label>第一条记录<select id="merge-first" required></select></label>
+      <label>第二条记录<select id="merge-second" required></select></label>
+    </div>
+    <div id="merge-preview" hidden></div>
+    <p id="merge-error" role="alert" hidden></p>
+    <div class="dialog-footer">
+      <button type="button" class="text-button" id="merge-edit-selection" hidden>重新选择</button>
+      <button type="button" class="button" data-close="merge-dialog">取消</button>
+      <button type="submit" class="button primary" id="merge-submit">核对记录</button>
+    </div>
+  </form>
+</dialog>
+<dialog id="detail-dialog"><div class="dialog-header"><div><span class="eyebrow">MATCH REPORT</span><h2>对局详情</h2></div><button class="icon-button" data-close="detail-dialog" aria-label="关闭">×</button></div><div id="detail-body"></div></dialog>
+<dialog id="cleanup-dialog"><form id="cleanup-form"><div class="dialog-header"><h2>清理本地截图</h2><button class="icon-button" type="button" data-close="cleanup-dialog">×</button></div><label class="radio-label"><input type="radio" name="mode" value="temporary" checked> 仅清理已处理的临时截图</label><label class="radio-label"><input type="radio" name="mode" value="expired"> 按已保存的保留期限清理</label><label class="radio-label"><input type="radio" name="mode" value="all"> 清理全部已处理截图</label><p class="subtle">战绩数据、英雄样本和待识别任务保留。</p><div class="dialog-footer"><span id="cleanup-result"></span><button class="button primary" type="submit">开始清理</button></div></form></dialog>
+<dialog id="image-dialog"><div class="dialog-header"><h2>原始截图</h2><button class="icon-button" data-close="image-dialog">×</button></div><img id="evidence-image" alt="原始游戏截图"></dialog>
+<dialog id="changelog-dialog" aria-labelledby="changelog-title"><div class="dialog-header"><div><span class="eyebrow">WHAT'S NEW</span><h2 id="changelog-title">版本历史</h2></div><button class="icon-button" data-close="changelog-dialog" aria-label="关闭">×</button></div><div id="changelog-content"></div><details id="tray-mascot" class="tray-mascot" hidden><summary>托盘彩蛋</summary><img src="assets/brand/divetrail-mascot.svg" alt="叼玫瑰的小水怪"></details></dialog>
+<dialog id="new-match-dialog"><form id="new-match-form"><div class="dialog-header"><h2>添加对局记录</h2><button class="icon-button" type="button" data-close="new-match-dialog">×</button></div><div class="form-row"><label>对局时间<input name="time" type="datetime-local" required></label><label>模式<select name="mode"><option value="ranked">排位</option><option value="casual">匹配</option><option value="event">活动</option></select></label><label>排名<input name="placement" type="number" min="1" max="30"></label><label>本局 RP<input name="delta" type="number" min="-3000" max="3000"></label></div><div id="manual-players"></div><div class="dialog-footer"><span>只填已知数据</span><button type="submit" class="button primary">保存记录</button></div></form></dialog><div id="toast" class="toast" role="status" hidden></div><datalist id="hero-names"></datalist>
+<script src="climb-chart.js"></script><script src="match-filters.js"></script><script src="overview.js"></script><script src="maps.js"></script><script src="app.js"></script><script src="window-layout.js"></script>
+</body></html>

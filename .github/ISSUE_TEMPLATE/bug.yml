@@ -1,0 +1,24 @@
+name: 识别或界面问题
+description: 记录可复现的问题
+title: "[问题] "
+body:
+  - type: input
+    id: environment
+    attributes:
+      label: 运行环境
+      description: 尾迹版本、Windows 版本、屏幕分辨率和缩放比例。
+      placeholder: DiveTrail 1.0.0 · Windows 11 · 1920 × 1080 · 125%
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: 怎么复现？
+      description: 按顺序写下操作和画面类型（如排位大厅、三人总结或经验值页），以及预期和实际结果。
+    validations:
+      required: true
+  - type: input
+    id: receipt
+    attributes:
+      label: 匿名反馈回执（可选）
+      description: 可在应用的「采集日志」提交匿名反馈。请勿在公开 Issue 附原图、完整日志、账号或本地路径。

@@ -1,0 +1,92 @@
+#capture-diagnostics-dialog {
+  width: min(760px, calc(100vw - 40px));
+  padding: clamp(16px, 3vh, 25px);
+}
+
+#capture-diagnostics-dialog .diagnostics-note {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+#capture-diagnostics-text {
+  width: 100%;
+  min-height: clamp(90px, 23vh, 220px);
+  padding: 12px;
+  resize: vertical;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font: 13px/1.6 ui-monospace, "Microsoft YaHei UI", monospace;
+}
+
+.diagnostics-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.anonymous-upload {
+  border-top: 1px solid var(--line);
+  margin-top: 12px;
+  padding-top: 10px;
+}
+.anonymous-upload p { margin: 8px 0; }
+.anonymous-upload .settings-toggle { display: flex; align-items: center; gap: 8px; }
+.anonymous-upload .diagnostics-actions { justify-content: flex-start; margin-top: 6px; }
+.anonymous-upload h3 { font-size: 14px; }
+.diagnostics-upload {
+  border-top: 1px solid var(--line);
+  margin-top: 14px;
+  padding-top: 12px;
+}
+.diagnostics-feedback-label { display: block; margin-bottom: 6px; font-weight: 650; }
+.diagnostics-feedback-label span { margin-left: 4px; font-weight: 400; }
+#diagnostics-feedback {
+  display: block;
+  width: 100%;
+  min-height: 56px;
+  resize: vertical;
+  padding: 8px 10px;
+  background: var(--input);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font: inherit;
+}
+#diagnostics-feedback::placeholder { color: var(--muted); }
+#diagnostics-feedback-hint { margin: 5px 0 10px; }
+.diagnostics-upload-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  margin-top: 10px;
+}
+#diagnostics-range {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+#diagnostics-range legend { margin-bottom: 6px; color: var(--muted); font-size: 12px; }
+#diagnostics-range label { display: flex; gap: 5px; align-items: center; }
+.diagnostics-upload-footer .diagnostics-actions { margin: 0 0 0 auto; }
+#diagnostics-upload-status { flex: 1 1 210px; min-width: 0; overflow-wrap: anywhere; }
+#cloud-logs-download { margin-right: auto; }
+
+@media (max-height: 690px) {
+  #capture-diagnostics-dialog .dialog-header { margin-bottom: 8px; }
+  #capture-diagnostics-dialog .diagnostics-note { margin-bottom: 8px; }
+  #capture-diagnostics-text { min-height: clamp(72px, 17vh, 130px); }
+  #capture-diagnostics-dialog > .diagnostics-actions { margin-top: 8px; }
+  .diagnostics-upload { margin-top: 10px; padding-top: 8px; }
+}

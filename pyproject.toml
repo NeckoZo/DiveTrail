@@ -1,0 +1,16 @@
+[tool.ruff]
+target-version = "py311"
+cache-dir = "output/.ruff_cache"
+extend-exclude = ["data", "output"]
+
+[tool.ruff.lint]
+# Start with errors that affect execution. Format legacy files only when their
+# behavior is covered and their current change warrants it.
+select = ["E9", "F63", "F7", "F82"]
+
+[tool.mypy]
+python_version = "3.11"
+files = ["matchlog/rp_progress.py", "matchlog/rp_reconcile.py", "tools/build_changelog.py"]
+follow_imports = "skip"
+cache_dir = "output/.mypy_cache"
+show_error_codes = true

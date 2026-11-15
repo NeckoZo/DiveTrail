@@ -1,0 +1,4 @@
+-r requirements.txt
+ruff>=0.11.13,<1
+mypy>=1.16,<2
+psutil>=6.1,<8
